@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>MentalBalance - Ansiedad</title>
+    <meta name="description" content="Información sobre ansiedad y cómo manejarla">
+    <link rel="icon" href="{{ url_for('static', filename='img/logo.png') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ansiedad.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    {% include 'layouts/navbar.html' %}
+    
+    <main class="ansiedad-container">
+       <!-- Hero Section - Versión mejorada -->
+        <section class="ansiedad-hero">
+            <div class="ansiedad-hero-content">
+                <h1>Entendiendo la Ansiedad</h1>
+                <p class="hero-subtitle">Aprende a reconocerla y manejarla con herramientas efectivas</p>
+                <img src="{{ url_for('static', filename='img/ansiedad.webp') }}" 
+                    alt="Representación visual de ansiedad" 
+                    class="hero-image">
+            </div>
+        </section>
+
+        <!-- Qué es la ansiedad -->
+        <section class="ansiedad-definicion">
+            <div class="definicion-content">
+                <div class="definicion-texto">
+                    <h2>¿Qué es la ansiedad?</h2>
+                    <p>La ansiedad es una respuesta natural del cuerpo ante situaciones de estrés o peligro. Es como un sistema de alarma que nos prepara para actuar. En dosis normales, puede ser útil, pero cuando se vuelve persistente o intensa, puede afectar significativamente nuestra calidad de vida.</p>
+                    <p>No es simplemente "estar nervioso". La ansiedad puede manifestarse de muchas formas y en diferentes grados de intensidad, desde una leve inquietud hasta ataques de pánico incapacitantes.</p>
+                </div>
+                <div class="definicion-caracteristicas">
+                    <div class="caracteristica">
+                        <h3>Común</h3>
+                        <p>1 de cada 5 personas experimenta ansiedad significativa en algún momento de su vida</p>
+                    </div>
+                    <div class="caracteristica">
+                        <h3>Manejable</h3>
+                        <p>Con las herramientas adecuadas, se puede aprender a controlar</p>
+                    </div>
+                    <div class="caracteristica">
+                        <h3>Temporal</h3>
+                        <p>Los episodios de ansiedad, aunque intensos, son pasajeros</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Síntomas -->
+        <section class="ansiedad-sintomas">
+            <h2>¿Cómo identificar la ansiedad?</h2>
+            <div class="sintomas-grid">
+                <div class="sintoma-card fisico">
+                    <h3>Síntomas físicos</h3>
+                    <ul>
+                        <li>Palpitaciones o taquicardia</li>
+                        <li>Sudoración excesiva</li>
+                        <li>Tensión muscular</li>
+                        <li>Problemas digestivos</li>
+                        <li>Mareos o vértigo</li>
+                    </ul>
+                </div>
+                <div class="sintoma-card emocional">
+                    <h3>Síntomas emocionales</h3>
+                    <ul>
+                        <li>Preocupación constante</li>
+                        <li>Irritabilidad</li>
+                        <li>Sensación de peligro inminente</li>
+                        <li>Dificultad para concentrarse</li>
+                        <li>Inseguridad</li>
+                    </ul>
+                </div>
+                <div class="sintoma-card conductual">
+                    <h3>Síntomas conductuales</h3>
+                    <ul>
+                        <li>Evitación de situaciones</li>
+                        <li>Inquietud o agitación</li>
+                        <li>Problemas para dormir</li>
+                        <li>Cambios en el apetito</li>
+                        <li>Dificultad para estar quieto</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Manejo -->
+        <section class="ansiedad-manejo">
+            <div class="manejo-content">
+                <h2>¿Cómo manejar la ansiedad?</h2>
+                <div class="manejo-tecnicas">
+                    <div class="tecnica">
+                        <h3>Técnicas de respiración</h3>
+                        <p>La respiración diafragmática puede ayudar a reducir los síntomas físicos de la ansiedad en minutos.</p>
+                    </div>
+                    <div class="tecnica">
+                        <h3>Ejercicio regular</h3>
+                        <p>La actividad física libera endorfinas que ayudan a regular el estado de ánimo y reducir la tensión.</p>
+                    </div>
+                    <div class="tecnica">
+                        <h3>Terapia cognitiva</h3>
+                        <p>Identificar y modificar patrones de pensamiento que contribuyen a la ansiedad.</p>
+                    </div>
+                </div>
+                <div class="manejo-llamado">
+                    <p>Si sientes que la ansiedad está afectando tu vida diaria, no dudes en buscar ayuda profesional.</p>
+                    <a href="#" class="btn-primario">Hablar con un especialista</a>
+                    <a href="#" class="btn-secundario">Realizar test de ansiedad</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    {% include 'layouts/footer.html' %}
+</body>
+</html>

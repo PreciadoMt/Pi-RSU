@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>MentalBalance - Familia</title>
+    <meta name="description" content="Soluciones para fortalecer los vínculos familiares">
+    <link rel="icon" href="{{ url_for('static', filename='img/logo.png') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/familia.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    {% include 'layouts/navbar.html' %}
+    
+    <main class="familia-container">
+        <!-- Hero Section -->
+        <section class="familia-hero">
+            <div class="familia-hero-content">
+                <h1>Fortaleciendo los Vínculos Familiares</h1>
+                <p class="hero-subtitle">Entiende y resuelve los desafíos en el hogar</p>
+            </div>
+        </section>
+
+        <!-- Qué son los problemas familiares -->
+        <section class="familia-definicion">
+            <div class="definicion-content">
+                <div class="definicion-texto">
+                    <h2>¿Qué son los problemas familiares?</h2>
+                    <p>Los problemas familiares surgen de conflictos entre miembros del hogar que afectan la comunicación, la convivencia y los lazos afectivos. Estos desafíos pueden manifestarse de diversas formas y en diferentes intensidades.</p>
+                    <p>No son un signo de fracaso familiar, sino oportunidades para crecer y fortalecer los lazos cuando se abordan adecuadamente.</p>
+                </div>
+                <div class="definicion-caracteristicas">
+                    <div class="caracteristica">
+                        <h3>Comunes</h3>
+                        <p>Todas las familias enfrentan desafíos en algún momento</p>
+                    </div>
+                    <div class="caracteristica">
+                        <h3>Superables</h3>
+                        <p>Con las herramientas adecuadas, se pueden resolver</p>
+                    </div>
+                    <div class="caracteristica">
+                        <h3>Oportunidades</h3>
+                        <p>Cada conflicto resuelto fortalece la relación</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tipos de conflictos -->
+        <section class="familia-conflictos">
+            <h2>Conflictos familiares más frecuentes</h2>
+            <div class="conflictos-grid">
+                <div class="conflicto-card comunicacion">
+                    <h3>Problemas de comunicación</h3>
+                    <ul>
+                        <li>Malentendidos frecuentes</li>
+                        <li>Falta de diálogo</li>
+                        <li>Interrupciones constantes</li>
+                        <li>Críticas destructivas</li>
+                        <li>No escucharse</li>
+                    </ul>
+                </div>
+                <div class="conflicto-card roles">
+                    <h3>Conflictos de roles</h3>
+                    <ul>
+                        <li>Límites poco claros</li>
+                        <li>Expectativas no cumplidas</li>
+                        <li>Distribución desigual de tareas</li>
+                        <li>Cambios en la estructura familiar</li>
+                        <li>Problemas generacionales</li>
+                    </ul>
+                </div>
+                <div class="conflicto-card valores">
+                    <h3>Diferencias de valores</h3>
+                    <ul>
+                        <li>Creencias distintas</li>
+                        <li>Estilos de vida diferentes</li>
+                        <li>Discrepancias en la crianza</li>
+                        <li>Cambios culturales</li>
+                        <li>Expectativas educativas</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Soluciones -->
+        <section class="familia-soluciones">
+            <div class="soluciones-content">
+                <h2>¿Cómo fortalecer la dinámica familiar?</h2>
+                <div class="soluciones-tecnicas">
+                    <div class="tecnica">
+                        <h3>Comunicación efectiva</h3>
+                        <p>Aprender a expresar necesidades y escuchar activamente es fundamental para resolver conflictos.</p>
+                    </div>
+                    <div class="tecnica">
+                        <h3>Tiempo de calidad</h3>
+                        <p>Dedicar momentos especiales para compartir fortalece los vínculos emocionales.</p>
+                    </div>
+                    <div class="tecnica">
+                        <h3>Terapia familiar</h3>
+                        <p>Un profesional puede ayudar a identificar patrones y ofrecer herramientas específicas.</p>
+                    </div>
+                </div>
+                <div class="soluciones-llamado">
+                    <p>Si los conflictos familiares están afectando tu bienestar, considera buscar ayuda profesional.</p>
+                    <div class="soluciones-botones">
+                        <a href="#" class="btn-primario">Hablar con un especialista</a>
+                        <a href="#" class="btn-secundario">Consejos para familias</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonios -->
+        <section class="familia-testimonios">
+            <h2>Familias que han superado sus desafíos</h2>
+            <div class="testimonios-grid">
+                <div class="testimonio-card">
+                    <p class="testimonio-texto">"La terapia familiar nos enseñó a comunicarnos sin herirnos. Ahora resolvemos los conflictos con respeto."</p>
+                    <p class="testimonio-autor">- Familia Rodríguez</p>
+                </div>
+                <div class="testimonio-card">
+                    <p class="testimonio-texto">"Aprendimos que nuestras diferencias nos hacen más fuertes cuando las aceptamos y trabajamos en equipo."</p>
+                    <p class="testimonio-autor">- Familia Martínez</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    {% include 'layouts/footer.html' %}
+</body>
+</html>

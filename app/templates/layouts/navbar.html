@@ -1,0 +1,35 @@
+<header class="header">
+    <div class="navbar-container">
+        <nav class="navbar">
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="MentalBalance" class="logo-img">
+                <a href="{{ url_for('general.inicio') }}" class="logo">Mental<span>Balance</span></a>
+            </div>
+            
+            <div class="nav-content">
+                <ul class="nav-links">
+                    <li><a href="#">Cerca de ti</a></li>
+                    <li><a href="#">Especialistas</a></li>
+                    <li><a href="#">Test mental</a></li>
+                    <li><a href="{{ url_for('general.nosotros') }}">Sobre nosotros</a></li>
+                </ul>
+                
+                <div class="nav-buttons">
+                    {% if session.user_id %}
+                        <div class="user-menu">
+                            <a href="{{ url_for('auth.logout') }}" class="btn-logout">
+                                <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                            </a>
+                            <a href="#" class="btn-profile">
+                                <i class="fas fa-user"></i> Mi perfil
+                            </a>
+                        </div>
+                    {% else %}
+                        <a href="{{ url_for('auth.login') }}" class="btn-login">Iniciar Sesión</a>
+                        <a href="{{ url_for('auth.registro') }}" class="btn-register">Regístrate</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>

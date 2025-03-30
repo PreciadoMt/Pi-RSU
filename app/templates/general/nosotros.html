@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>MentalBalance - Nosotros</title>
+    <meta name="description" content="Conoce nuestra misión, visión y equipo profesional">
+    <link rel="icon" href="{{ url_for('static', filename='img/logo.png') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nosotros.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    {% include 'layouts/navbar.html' %}
+    
+    <main class="nosotros-container">
+        <!-- Hero Section -->
+        <section class="nosotros-hero">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1>Nuestra Esencia</h1>
+                <p class="hero-subtitle">Comprometidos con tu bienestar emocional</p>
+            </div>
+        </section>
+
+        <!-- Sección de Misión -->
+        <section class="nosotros-seccion mision">
+            <div class="seccion-contenido">
+                <div class="seccion-imagen">
+                    <img src="{{ url_for('static', filename='img/mision.avif') }}" alt="Misión" class="imagen-destacada">
+                    <div class="decoracion decoracion-1"></div>
+                </div>
+                <div class="seccion-texto">
+                    <div class="encabezado-seccion">
+                        <span class="numero-seccion">01</span>
+                        <h2 class="titulo-seccion">Nuestra Misión</h2>
+                    </div>
+                    <div class="contenido-texto">
+                        <p>Impulsamos el bienestar emocional ofreciendo apoyo psicológico accesible y herramientas prácticas que generan impacto positivo en la salud mental.</p>
+                        <p>Creemos firmemente que cada individuo merece vivir una vida plena y equilibrada, por lo que trabajamos diariamente para ofrecer soluciones adaptadas a necesidades específicas.</p>
+                        <ul class="lista-mision">
+                            <li><span>✓</span> Accesibilidad para todos</li>
+                            <li><span>✓</span> Enfoque personalizado</li>
+                            <li><span>✓</span> Resultados comprobables</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Visión -->
+        <section class="nosotros-seccion vision">
+            <div class="seccion-contenido inverso">
+                <div class="seccion-texto">
+                    <div class="encabezado-seccion">
+                        <span class="numero-seccion">02</span>
+                        <h2 class="titulo-seccion">Nuestra Visión</h2>
+                    </div>
+                    <div class="contenido-texto">
+                        <p>Convertirnos en referentes globales en el cuidado mental, integrando tecnología avanzada con tratamientos personalizados para el bienestar integral.</p>
+                        <p>Aspiramos a construir una sociedad más consciente sobre la importancia de la salud mental, eliminando estigmas y brindando acceso universal a recursos de calidad.</p>
+                        <div class="datos-vision">
+                            <div class="dato-item">
+                                <span class="dato-numero">+5000</span>
+                                <span class="dato-texto">Pacientes atendidos</span>
+                            </div>
+                            <div class="dato-item">
+                                <span class="dato-numero">+50</span>
+                                <span class="dato-texto">Profesionales calificados</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="seccion-imagen">
+                    <img src="{{ url_for('static', filename='img/vision.png') }}" alt="Visión" class="imagen-destacada">
+                    <div class="decoracion decoracion-2"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Equipo -->
+        <section class="nosotros-seccion equipo">
+            <div class="seccion-contenido">
+                <div class="seccion-imagen">
+                    <img src="{{ url_for('static', filename='img/team.png') }}" alt="Equipo" class="imagen-destacada">
+                    <div class="decoracion decoracion-3"></div>
+                </div>
+                <div class="seccion-texto">
+                    <div class="encabezado-seccion">
+                        <span class="numero-seccion">03</span>
+                        <h2 class="titulo-seccion">Nuestro Equipo</h2>
+                    </div>
+                    <div class="contenido-texto">
+                        <p>Un equipo multidisciplinario apasionado por el bienestar mental, conformado por profesionales que combinan experiencia clínica con innovación.</p>
+                        <div class="especialidades-equipo">
+                            <div class="especialidad">
+                                <div class="icono-especialidad">👩‍⚕️</div>
+                                <h3>Psicólogos Clínicos</h3>
+                            </div>
+                            <div class="especialidad">
+                                <div class="icono-especialidad">🧠</div>
+                                <h3>Neuropsicólogos</h3>
+                            </div>
+                            <div class="especialidad">
+                                <div class="icono-especialidad">👨‍👩‍👧</div>
+                                <h3>Terapeutas Familiares</h3>
+                            </div>
+                        </div>
+                        <a href="#" class="btn-conoce-equipo">Conoce al equipo completo</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Valores Corporativos -->
+        <section class="valores-corporativos">
+            <h2 class="titulo-valores">Nuestros Valores</h2>
+            <p class="subtitulo-valores">Principios que guían nuestro trabajo</p>
+            
+            <div class="valores-grid">
+                <div class="valor-card">
+                    <div class="valor-icono">❤️</div>
+                    <h3>Empatía</h3>
+                    <p>Ponemos el corazón en cada consulta, entendiendo profundamente las necesidades de nuestros pacientes.</p>
+                </div>
+                <div class="valor-card">
+                    <div class="valor-icono">🔍</div>
+                    <h3>Transparencia</h3>
+                    <p>Practicamos la honestidad en cada diagnóstico y tratamiento, manteniendo canales abiertos de comunicación.</p>
+                </div>
+                <div class="valor-card">
+                    <div class="valor-icono">🌱</div>
+                    <h3>Crecimiento</h3>
+                    <p>Creemos en la mejora continua, tanto personal como profesional, para ofrecer siempre lo mejor.</p>
+                </div>
+                <div class="valor-card">
+                    <div class="valor-icono">🤝</div>
+                    <h3>Compromiso</h3>
+                    <p>Nos dedicamos completamente al bienestar de nuestros pacientes, acompañándolos en cada paso.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    {% include 'layouts/footer.html' %}
+</body>
+</html>
