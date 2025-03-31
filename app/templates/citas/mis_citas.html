@@ -6,7 +6,9 @@
     <meta name="description" content="Gestiona tus citas con especialistas en salud mental">
     <link rel="icon" href="{{ url_for('static', filename='img/logo.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/citas.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/misCitas.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
@@ -51,27 +53,34 @@
                             <div class="especialista-info">
                                 <h3>Dr(a). {{ cita.nombre }} {{ cita.apellido }}</h3>
                                 <div class="especialidad-badge">{{ cita.especialidad }}</div>
+                                <div class="especialista-modelo">{{ cita.modelo_terapeutico }}</div>
                             </div>
                         </div>
                         
                         <div class="cita-detalles">
                             <div class="detalle-item">
-                                <i class="fas fa-calendar-day"></i>
-                                <div>
+                                <div class="detalle-icono">
+                                    <i class="fas fa-calendar-day"></i>
+                                </div>
+                                <div class="detalle-contenido">
                                     <span class="detalle-label">Fecha</span>
                                     <span class="detalle-valor">{{ cita.fecha.strftime('%A %d/%m/%Y') }}</span>
                                 </div>
                             </div>
                             <div class="detalle-item">
-                                <i class="fas fa-clock"></i>
-                                <div>
+                                <div class="detalle-icono">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="detalle-contenido">
                                     <span class="detalle-label">Hora</span>
                                     <span class="detalle-valor">{{ cita.hora_str }}</span>
                                 </div>
                             </div>
                             <div class="detalle-item">
-                                <i class="fas fa-money-bill-wave"></i>
-                                <div>
+                                <div class="detalle-icono">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                                <div class="detalle-contenido">
                                     <span class="detalle-label">Precio</span>
                                     <span class="detalle-valor">${{ cita.precio|round|int }} MXN</span>
                                 </div>
@@ -117,29 +126,38 @@
                             <div class="especialista-info">
                                 <h3>Dr(a). {{ cita.nombre }} {{ cita.apellido }}</h3>
                                 <div class="especialidad-badge">{{ cita.especialidad }}</div>
+                                <div class="especialista-modelo">{{ cita.modelo_terapeutico }}</div>
                             </div>
                         </div>
                         
                         <div class="cita-detalles">
                             <div class="detalle-item">
-                                <i class="fas fa-calendar-day"></i>
-                                <div>
+                                <div class="detalle-icono">
+                                    <i class="fas fa-calendar-day"></i>
+                                </div>
+                                <div class="detalle-contenido">
                                     <span class="detalle-label">Fecha</span>
                                     <span class="detalle-valor">{{ cita.fecha.strftime('%d/%m/%Y') }}</span>
                                 </div>
                             </div>
                             <div class="detalle-item">
-                                <i class="fas fa-clock"></i>
-                                <div>
+                                <div class="detalle-icono">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="detalle-contenido">
                                     <span class="detalle-label">Hora</span>
                                     <span class="detalle-valor">{{ cita.hora_str }}</span>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div class="cita-estado estado-{{ cita.estado }}">
-                            <i class="fas fa-{% if cita.estado == 'cancelada' %}times-circle{% else %}calendar-check{% endif %}"></i>
-                            <span>{{ cita.estado|capitalize }}</span>
+                            <div class="detalle-item">
+                                <div class="detalle-icono">
+                                    <i class="fas fa-comment"></i>
+                                </div>
+                                <div class="detalle-contenido">
+                                    <span class="detalle-label">Estado</span>
+                                    <span class="detalle-valor">{{ cita.estado|capitalize }}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     {% endfor %}
@@ -152,23 +170,57 @@
     {% include 'layouts/footer.html' %}
 
     <script>
-        // Confirmación antes de cancelar con mejor UX
+        // Confirmación antes de cancelar con SweetAlert
         document.querySelectorAll('.cancelar-form').forEach(form => {
             form.addEventListener('submit', function(e) {
                 e.preventDefault();
                 
-                const confirmacion = confirm('¿Estás seguro de que deseas cancelar esta cita?');
-                if (confirmacion) {
-                    // Agregar animación de carga
-                    const button = this.querySelector('.btn-cancelar');
-                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cancelando...';
-                    button.disabled = true;
-                    
-                    // Enviar el formulario
-                    this.submit();
-                }
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "Vas a cancelar esta cita. ¿Deseas continuar?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#749CA0',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Sí, cancelar',
+                    cancelButtonText: 'No, mantener',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Mostrar estado de carga
+                        const button = this.querySelector('.btn-cancelar');
+                        const originalText = button.innerHTML;
+                        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cancelando...';
+                        button.disabled = true;
+                        
+                        // Enviar el formulario
+                        fetch(this.action, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: new URLSearchParams(new FormData(this))
+                        })
+                        .then(response => {
+                            if (response.redirected) {
+                                window.location.href = response.url;
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            button.innerHTML = originalText;
+                            button.disabled = false;
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Ocurrió un error al cancelar la cita',
+                                icon: 'error'
+                            });
+                        });
+                    }
+                });
             });
         });
     </script>
+
 </body>
 </html>

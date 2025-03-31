@@ -25,3 +25,8 @@ def nosotros():
 @general_bp.route('/profesionales')
 def profesionales():
     return render_template('general/profesionales.html') 
+
+
+@general_bp.route('/test')
+def test():
+    return render_template('general/test.html') 
