@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>MentalBalance - Encuentra tu especialista</title>
+    <meta name="description" content="Conectamos pacientes con los mejores psicólogos y terapeutas especializados en salud mental">
+    <link rel="icon" href="{{ url_for('static', filename='img/logo.png') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/citas.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    {% include 'layouts/navbar.html' %}
+    
+    <main class="container">
+        <section class="encabezado-busqueda">
+            <h1>Conecta con el especialista ideal para ti</h1>
+            <p class="subtitle">Agenda tu sesión en línea de manera segura y confidencial</p>
+        </section>
+        
+        <div class="filtros-container">
+            <form method="GET" action="{{ url_for('citas.catalogo_citas') }}" class="filtros-form">
+                <div class="filtros-grid">
+                    <div class="filtro-group">
+                        <label for="especialidad" class="filtro-label">Especialidad</label>
+                        <select name="especialidad" id="especialidad" class="filtro-select">
+                            <option value="">Todas las especialidades</option>
+                            {% for esp in especialidades %}
+                            <option value="{{ esp }}" {% if request.args.get('especialidad') == esp %}selected{% endif %}>{{ esp }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+            
+                    <div class="filtro-group">
+                        <label for="modelo" class="filtro-label">Modelo terapéutico</label>
+                        <select name="modelo" id="modelo" class="filtro-select">
+                            <option value="">Todos los modelos</option>
+                            {% for modelo in modelos %}
+                            <option value="{{ modelo }}" {% if request.args.get('modelo') == modelo %}selected{% endif %}>{{ modelo }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+            
+                    <div class="filtro-group">
+                        <label for="genero" class="filtro-label">Género</label>
+                        <select name="genero" id="genero" class="filtro-select">
+                            <option value="">Cualquier género</option>
+                            {% for genero in generos %}
+                            <option value="{{ genero }}" {% if request.args.get('genero') == genero %}selected{% endif %}>{{ genero }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+            
+                    <div class="filtro-group range-group">
+                        <label for="slider-precio" class="filtro-label">Precio máximo: <span class="precio-valor">$<span id="precio-mostrar">{{ filtro_precio }}</span> MXN</span></label>
+                        <input type="range" name="precio" id="slider-precio" min="100" max="2000" 
+                               value="{{ request.args.get('precio', 2000) }}" 
+                               step="50" class="range-input">
+                        <div class="range-labels">
+                            <span>$100</span>
+                            <span>$2000</span>
+                        </div>
+                    </div>
+            
+                    <button type="submit" class="btn-filtrar">
+                        <i class="fas fa-filter"></i> Filtrar
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <section class="resultados-citas">
+            {% if especialistas %}
+            <div class="resultados-grid">
+                {% for esp in especialistas %}
+                <article class="card-especialista">
+                    <div class="especialista-header">
+                        <div class="especialista-avatar">
+                            <i class="fas fa-user-circle"></i>
+                        </div>
+                        <div class="especialista-titulo">
+                            <h3>Dr. {{ esp.nombre }} {{ esp.apellido }}</h3>
+                            <div class="especialidad-badge">{{ esp.especialidad }}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="especialista-detalles">
+                        <div class="detalle-item">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>{{ esp.años_experiencia }} años de experiencia</span>
+                        </div>
+                        <div class="detalle-item">
+                            <i class="fas fa-comments"></i>
+                            <span>{{ esp.modelo_terapeutico }}</span>
+                        </div>
+                        <div class="detalle-item">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>${{ esp.precio }} MXN por sesión</span>
+                        </div>
+                    </div>
+                    
+                    <div class="especialista-bio">
+                        <p>Especialista en {{ esp.especialidad }} con enfoque en {{ esp.modelo_terapeutico }}. Atiende tanto a adolescentes como a adultos.</p>
+                    </div>
+                    
+                    <div class="form-agendar">
+                        {% if user_logged_in %}
+                            <form method="POST" action="{{ url_for('citas.agendar_cita') }}" id="form-cita-{{ esp.id }}" class="cita-form">
+                                <input type="hidden" name="id_especialista" value="{{ esp.id }}">
+                                
+                                <div class="form-group">
+                                    <label for="fecha-{{ esp.id }}" class="form-label">Fecha de la cita</label>
+                                    <input type="date" name="fecha" id="fecha-{{ esp.id }}"
+                                           min="{{ today }}" 
+                                           class="fecha-cita"
+                                           data-especialista="{{ esp.id }}"
+                                           required>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label for="hora-{{ esp.id }}" class="form-label">Horario disponible</label>
+                                    <select name="hora" id="hora-{{ esp.id }}" class="hora-cita" required>
+                                        <option value="">Selecciona una fecha primero</option>
+                                    </select>
+                                </div>
+                                
+                                <button type="submit" class="btn-agendar">
+                                    <i class="fas fa-calendar-check"></i> Agendar cita
+                                </button>
+                            </form>
+                        {% else %}
+                            <div class="login-required">
+                                <p>Inicia sesión para agendar una cita</p>
+                                <a href="{{ url_for('auth.login') }}" class="btn-login-required">
+                                    <i class="fas fa-sign-in-alt"></i> Iniciar sesión
+                                </a>
+                                <p class="register-link">¿No tienes cuenta? <a href="{{ url_for('auth.registro') }}">Regístrate aquí</a></p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="sin-resultados">
+                <img src="{{ url_for('static', filename='img/no-results.svg') }}" alt="Sin resultados" class="no-results-img">
+                <h3>No encontramos especialistas con estos filtros</h3>
+                <p>Intenta ajustar tus criterios de búsqueda o <a href="{{ url_for('citas.catalogo_citas') }}">ver todos los especialistas</a></p>
+            </div>
+            {% endif %}
+        </section>
+    </main>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    document.getElementById("slider-precio").oninput = function() {
+        document.getElementById("precio-mostrar").textContent = this.value;
+    };
+    
+    $(document).ready(function() {
+        $('.fecha-cita').change(function() {
+            const especialistaId = $(this).data('especialista');
+            const fecha = $(this).val();
+            const horaSelect = $(this).closest('.form-agendar').find('.hora-cita');
+            
+            if(fecha) {
+                horaSelect.html('<option value="">Cargando horarios...</option>');
+                
+                $.get(`/get-horarios/${especialistaId}/${fecha}`, function(horarios) {
+                    if(horarios.length > 0) {
+                        let options = '<option value="">Selecciona una hora</option>';
+                        horarios.forEach(hora => {
+                            const horaStr = hora.substring(0,5);
+                            const horaFormatted = horaStr + (parseInt(horaStr) < 12 ? ' AM' : ' PM');
+                            options += `<option value="${hora}">${horaFormatted}</option>`;
+                        });
+                        horaSelect.html(options);
+                    } else {
+                        horaSelect.html('<option value="">No hay horarios disponibles</option>');
+                    }
+                });
+            }
+        });
+    });
+    </script>
+
+    {% include 'layouts/footer.html' %}
+</body>
+</html>

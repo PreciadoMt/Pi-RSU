@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>MentalBalance - Para Profesionales</title>
+    <meta name="description" content="Plataforma para profesionales de la salud mental">
+    <link rel="icon" href="{{ url_for('static', filename='img/logo.png') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profesionales.css') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    {% include 'layouts/navbar.html' %}
+    
+    <main class="profesionales-container">
+        <!-- Hero Section -->
+        <section class="profesionales-hero">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Potencia tu <span class="text-highlight">práctica profesional</span></h1>
+                    <p class="hero-subtitle">Únete a la plataforma líder en conexión de psicólogos con pacientes</p>
+                    <div class="hero-cta-container">
+                        <a href="{{ url_for('auth.registro_especialista') }}" class="btn-cta-secondary">Registrate con nosotros</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="{{ url_for('static', filename='img/profesional-hero.jpg') }}" alt="Profesional de salud mental">
+                </div>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">+2,500</span>
+                    <span class="stat-label">Profesionales registrados</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">92%</span>
+                    <span class="stat-label">Satisfacción profesional</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">4.8/5</span>
+                    <span class="stat-label">Valoración promedio</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Beneficios -->
+        <section id="beneficios" class="beneficios-section">
+            <div class="section-header">
+                <h2>Ventajas <span class="text-highlight">exclusivas</span> para profesionales</h2>
+                <p class="section-subtitle">Diseñado para optimizar tu práctica clínica</p>
+            </div>
+            
+            <div class="beneficios-grid">
+                <div class="beneficio-card">
+                    <div class="beneficio-header">
+                        <div class="beneficio-icon">
+                            <img src="{{ url_for('static', filename='img/icons/pacientes-icon.svg') }}" alt="Pacientes">
+                        </div>
+                        <h3>Conexión con pacientes ideales</h3>
+                    </div>
+                    <p>Nuestro sistema de matching conecta tu perfil con pacientes que necesitan exactamente tu especialidad y enfoque terapéutico.</p>
+                </div>
+                
+                <div class="beneficio-card">
+                    <div class="beneficio-header">
+                        <div class="beneficio-icon">
+                            <img src="{{ url_for('static', filename='img/icons/herramientas-icon.svg') }}" alt="Herramientas">
+                        </div>
+                        <h3>Suite profesional completa</h3>
+                    </div>
+                    <p>Agenda inteligente, notas de sesión, formularios clínicos y seguimiento de tratamiento en una sola plataforma.</p>
+                </div>
+                
+                <div class="beneficio-card">
+                    <div class="beneficio-header">
+                        <div class="beneficio-icon">
+                            <img src="{{ url_for('static', filename='img/icons/finanzas-icon.svg') }}" alt="Finanzas">
+                        </div>
+                        <h3>Gestión financiera simplificada</h3>
+                    </div>
+                    <p>Cobros automáticos, facturación electrónica y reportes detallados de tus ingresos.</p>
+                </div>
+                
+                <div class="beneficio-card">
+                    <div class="beneficio-header">
+                        <div class="beneficio-icon">
+                            <img src="{{ url_for('static', filename='img/icons/crecimiento-icon.svg') }}" alt="Crecimiento">
+                        </div>
+                        <h3>Desarrollo profesional</h3>
+                    </div>
+                    <p>Acceso a webinars exclusivos, supervisiones clínicas y descuentos en formación continua.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Demo Plataforma -->
+        <section class="demo-section">
+            <div class="demo-content">
+                <div class="demo-text">
+                    <h2>Conoce nuestra <span class="text-highlight">plataforma profesional</span></h2>
+                    <p>Interfaz diseñada por y para profesionales de la salud mental. Simple para tus pacientes, potente para tu práctica.</p>
+                    <ul class="demo-features">
+                        <li>Agenda sincronizada con Google/Outlook</li>
+                        <li>Historiales clínicos seguros</li>
+                        <li>Videollamadas integradas</li>
+                        <li>Recordatorios automáticos</li>
+                    </ul>
+                </div>
+                <div class="demo-image">
+                    <img src="{{ url_for('static', filename='img/plataforma-demo.png') }}" alt="Demo plataforma" class="platform-img">
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonios -->
+        <section class="testimonios-section">
+            <div class="section-header">
+                <h2>Lo que dicen <span class="text-highlight">nuestros profesionales</span></h2>
+                <p class="section-subtitle">Experiencias reales de nuestra comunidad</p>
+            </div>
+            
+            <div class="testimonios-carousel">
+                <div class="testimonio-card">
+                    <div class="testimonio-content">
+                        <div class="testimonio-rating">
+                            ★★★★★
+                        </div>
+                        <p class="testimonio-texto">"Desde que me uní a MentalBalance, mi consulta privada se ha llenado sin necesidad de publicidad. La calidad de los pacientes es excelente y las herramientas me ahorran horas de trabajo administrativo."</p>
+                        <div class="testimonio-autor">
+                            <img src="{{ url_for('static', filename='img/testimonio1.jpg') }}" alt="Dra. Laura Méndez" class="autor-avatar">
+                            <div class="autor-info">
+                                <strong>Dra. Laura Méndez</strong>
+                                <span>Psicóloga Clínica - Especialista en TCC</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonio-card">
+                    <div class="testimonio-content">
+                        <div class="testimonio-rating">
+                            ★★★★☆
+                        </div>
+                        <p class="testimonio-texto">"La plataforma es intuitiva y los pagos siempre llegan a tiempo. Lo que más valoro es la flexibilidad para manejar mis horarios y el soporte técnico que resuelve cualquier duda rápidamente."</p>
+                        <div class="testimonio-autor">
+                            <img src="{{ url_for('static', filename='img/testimonio2.jpg') }}" alt="Dr. Carlos Ruiz" class="autor-avatar">
+                            <div class="autor-info">
+                                <strong>Dr. Carlos Ruiz</strong>
+                                <span>Psiquiatra - Terapeuta Familiar</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-final">
+            <div class="cta-content">
+                <h2>¿Listo para unirte a nuestra red de especialistas?</h2>
+                <p>Descubre cómo podemos ayudarte a crecer tu práctica profesional</p>
+                <a href="{{ url_for('auth.registro_especialista') }}" class="btn-cta-primary">Registro para especialistas</a>
+            </div>
+        </section>
+
+    </main>
+
+    {% include 'layouts/footer.html' %}
+</body>
+</html>

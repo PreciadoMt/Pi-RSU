@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Citas - MentalBalance</title>
+    <meta name="description" content="Gestiona tus citas con especialistas en salud mental">
+    <link rel="icon" href="{{ url_for('static', filename='img/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/citas.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    {% include 'layouts/navbar.html' %}
+
+    <main class="container">
+        <section class="mis-citas-section">
+            <div class="mis-citas-header">
+                <h1><i class="fas fa-calendar-alt"></i> Mis Citas</h1>
+                <a href="{{ url_for('citas.catalogo_citas') }}" class="btn-nueva-cita">
+                    <i class="fas fa-plus"></i> Nueva cita
+                </a>
+            </div>
+            
+            {% if not citas_activas %}
+            <div class="sin-citas">
+                <div class="sin-citas-content">
+                    <img src="{{ url_for('static', filename='img/no-appointments.svg') }}" alt="Sin citas" class="sin-citas-img">
+                    <h3>No tienes citas programadas</h3>
+                    <p>Agenda tu primera cita con uno de nuestros especialistas</p>
+                    <a href="{{ url_for('citas.catalogo_citas') }}" class="btn-primary">
+                        <i class="fas fa-search"></i> Buscar especialistas
+                    </a>
+                </div>
+            </div>
+            {% else %}
+            <div class="citas-activas">
+                <h2 class="seccion-titulo">
+                    <i class="fas fa-calendar-check"></i> 
+                    <span>Próximas citas</span>
+                    <span class="badge-contador">{{ citas_activas|length }}</span>
+                </h2>
+                
+                <div class="citas-grid">
+                    {% for cita in citas_activas %}
+                    <div class="cita-card {{ cita.estado }}">
+                        <div class="cita-card-header">
+                            <div class="especialista-avatar">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <div class="especialista-info">
+                                <h3>Dr(a). {{ cita.nombre }} {{ cita.apellido }}</h3>
+                                <div class="especialidad-badge">{{ cita.especialidad }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="cita-detalles">
+                            <div class="detalle-item">
+                                <i class="fas fa-calendar-day"></i>
+                                <div>
+                                    <span class="detalle-label">Fecha</span>
+                                    <span class="detalle-valor">{{ cita.fecha.strftime('%A %d/%m/%Y') }}</span>
+                                </div>
+                            </div>
+                            <div class="detalle-item">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <span class="detalle-label">Hora</span>
+                                    <span class="detalle-valor">{{ cita.hora_str }}</span>
+                                </div>
+                            </div>
+                            <div class="detalle-item">
+                                <i class="fas fa-money-bill-wave"></i>
+                                <div>
+                                    <span class="detalle-label">Precio</span>
+                                    <span class="detalle-valor">${{ cita.precio|round|int }} MXN</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="cita-estado estado-{{ cita.estado }}">
+                            <i class="fas fa-{% if cita.estado == 'pendiente' %}hourglass-half{% elif cita.estado == 'confirmada' %}check-circle{% elif cita.estado == 'cancelada' %}times-circle{% else %}calendar-check{% endif %}"></i>
+                            <span>{{ cita.estado|capitalize }}</span>
+                        </div>
+                        
+                        {% if cita.estado == 'pendiente' %}
+                        <div class="cita-acciones">
+                            <form method="POST" action="{{ url_for('citas.cancelar_cita', cita_id=cita.id) }}" 
+                                class="cancelar-form">
+                                <button type="submit" class="btn-cancelar" title="Cancelar cita">
+                                    <i class="fas fa-times"></i> Cancelar cita
+                                </button>
+                            </form>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if historial_citas %}
+            <div class="historial-citas">
+                <h2 class="seccion-titulo">
+                    <i class="fas fa-history"></i> 
+                    <span>Historial de citas</span>
+                    <span class="badge-contador">{{ historial_citas|length }}</span>
+                </h2>
+                
+                <div class="historial-grid">
+                    {% for cita in historial_citas %}
+                    <div class="cita-card historial">
+                        <div class="cita-card-header">
+                            <div class="especialista-avatar">
+                                <i class="fas fa-user-md"></i>
+                            </div>
+                            <div class="especialista-info">
+                                <h3>Dr(a). {{ cita.nombre }} {{ cita.apellido }}</h3>
+                                <div class="especialidad-badge">{{ cita.especialidad }}</div>
+                            </div>
+                        </div>
+                        
+                        <div class="cita-detalles">
+                            <div class="detalle-item">
+                                <i class="fas fa-calendar-day"></i>
+                                <div>
+                                    <span class="detalle-label">Fecha</span>
+                                    <span class="detalle-valor">{{ cita.fecha.strftime('%d/%m/%Y') }}</span>
+                                </div>
+                            </div>
+                            <div class="detalle-item">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <span class="detalle-label">Hora</span>
+                                    <span class="detalle-valor">{{ cita.hora_str }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="cita-estado estado-{{ cita.estado }}">
+                            <i class="fas fa-{% if cita.estado == 'cancelada' %}times-circle{% else %}calendar-check{% endif %}"></i>
+                            <span>{{ cita.estado|capitalize }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </section>
+    </main>
+
+    {% include 'layouts/footer.html' %}
+
+    <script>
+        // Confirmación antes de cancelar con mejor UX
+        document.querySelectorAll('.cancelar-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const confirmacion = confirm('¿Estás seguro de que deseas cancelar esta cita?');
+                if (confirmacion) {
+                    // Agregar animación de carga
+                    const button = this.querySelector('.btn-cancelar');
+                    button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cancelando...';
+                    button.disabled = true;
+                    
+                    // Enviar el formulario
+                    this.submit();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -9,8 +9,8 @@
             <div class="nav-content">
                 <ul class="nav-links">
                     <li><a href="#">Cerca de ti</a></li>
-                    <li><a href="#">Especialistas</a></li>
-                    <li><a href="#">Test mental</a></li>
+                    <li><a href="{{ url_for('citas.catalogo_citas') }}">Especialistas</a></li>
+                    <li><a href="">Nuestros Tests</a></li>
                     <li><a href="{{ url_for('general.nosotros') }}">Sobre nosotros</a></li>
                 </ul>
                 
@@ -20,7 +20,7 @@
                             <a href="{{ url_for('auth.logout') }}" class="btn-logout">
                                 <i class="fas fa-sign-out-alt"></i> Cerrar sesión
                             </a>
-                            <a href="#" class="btn-profile">
+                            <a href="{{ url_for('citas.mis_citas') }}" class="btn-profile">
                                 <i class="fas fa-user"></i> Mi perfil
                             </a>
                         </div>

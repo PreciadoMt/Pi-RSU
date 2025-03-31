@@ -21,3 +21,7 @@ def familia():
 @general_bp.route('/nosotros')
 def nosotros():
     return render_template('general/nosotros.html') 
+
+@general_bp.route('/profesionales')
+def profesionales():
+    return render_template('general/profesionales.html') 

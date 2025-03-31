@@ -18,6 +18,8 @@ def create_app():
 def register_blueprints(app):
     from app.routes.general import general_bp
     from app.routes.auth import auth_bp
+    from app.routes.citas import citas_bp  
     
     app.register_blueprint(general_bp)
     app.register_blueprint(auth_bp)
+    app.register_blueprint(citas_bp) 

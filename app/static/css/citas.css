@@ -1,0 +1,654 @@
+/* ==================== CITAS STYLES ==================== */
+
+/* Encabezado */
+.encabezado-busqueda {
+    text-align: center;
+    margin: var(--space-xl) 0 var(--space-lg);
+    padding: 0 var(--space-md);
+}
+
+.encabezado-busqueda h1 {
+    font-size: 2rem;
+    color: var(--secondary-color);
+    margin-bottom: var(--space-sm);
+}
+
+.encabezado-busqueda .subtitle {
+    color: var(--secondary-light);
+    font-size: 1.125rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Filtros */
+.filtros-container {
+    background-color: var(--primary-extra-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    margin-bottom: var(--space-xl);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.filtros-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: var(--space-md);
+    align-items: end;
+}
+
+.filtro-group {
+    margin-bottom: 0;
+}
+
+.filtro-label {
+    display: block;
+    margin-bottom: var(--space-xs);
+    font-size: 0.875rem;
+    color: var(--secondary-light);
+    font-weight: 500;
+}
+
+.filtro-select {
+    width: 100%;
+    padding: var(--space-sm);
+    border: 1px solid var(--medium-gray);
+    border-radius: var(--radius-md);
+    background-color: var(--white);
+    font-family: var(--font-body);
+    color: var(--secondary-color);
+    transition: all 0.2s ease;
+}
+
+.filtro-select:hover {
+    border-color: var(--primary-color);
+}
+
+.filtro-select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(116, 156, 160, 0.2);
+}
+
+.range-group {
+    grid-column: span 2;
+}
+
+.range-input {
+    width: 100%;
+    height: 6px;
+    margin: var(--space-sm) 0 var(--space-xs);
+    -webkit-appearance: none;
+    background: var(--medium-gray);
+    border-radius: 3px;
+    outline: none;
+}
+
+.range-input::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: var(--primary-color);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.range-input::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    background: var(--primary-dark);
+}
+
+.precio-valor {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.range-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--secondary-light);
+}
+
+.btn-filtrar {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    height: fit-content;
+}
+
+.btn-filtrar:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(116, 156, 160, 0.3);
+}
+
+/* Resultados */
+.resultados-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-lg);
+}
+
+.card-especialista {
+    background-color: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 90px;
+}
+
+.card-especialista:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.especialista-header {
+    display: flex;
+    align-items: center;
+    padding: var(--space-md);
+    background-color: var(--primary-extra-light);
+    border-bottom: 1px solid var(--medium-gray);
+}
+
+.especialista-avatar {
+    margin-right: var(--space-md);
+}
+
+.especialista-avatar i {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+}
+
+.especialista-titulo h3 {
+    font-size: 1.125rem;
+    margin-bottom: var(--space-xs);
+}
+
+.especialidad-badge {
+    display: inline-block;
+    background-color: var(--primary-light);
+    color: var(--primary-dark);
+    padding: 0.25rem var(--space-sm);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.especialista-detalles {
+    padding: var(--space-md);
+    border-bottom: 1px solid var(--medium-gray);
+}
+
+.detalle-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--space-sm);
+    font-size: 0.875rem;
+}
+
+.detalle-item:last-child {
+    margin-bottom: 0;
+}
+
+.detalle-item i {
+    margin-right: var(--space-sm);
+    color: var(--primary-color);
+    width: 1.25rem;
+    text-align: center;
+}
+
+.especialista-bio {
+    padding: var(--space-md);
+    font-size: 0.875rem;
+    color: var(--secondary-light);
+    flex-grow: 1;
+}
+
+/* Formulario de agendar */
+.form-agendar {
+    padding: var(--space-md);
+    background-color: var(--light-gray);
+}
+
+.cita-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.form-label {
+    font-size: 0.875rem;
+    color: var(--secondary-light);
+    margin-bottom: 0.25rem;
+    display: block;
+}
+
+.fecha-cita, .hora-cita {
+    width: 100%;
+    padding: var(--space-sm);
+    border: 1px solid var(--medium-gray);
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    color: var(--secondary-color);
+    transition: all 0.2s ease;
+}
+
+.fecha-cita:hover, .hora-cita:hover {
+    border-color: var(--primary-color);
+}
+
+.fecha-cita:focus, .hora-cita:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(116, 156, 160, 0.2);
+}
+
+.btn-agendar {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: var(--space-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+}
+
+.btn-agendar:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(116, 156, 160, 0.3);
+}
+
+/* Login requerido */
+.login-required {
+    text-align: center;
+    padding: var(--space-sm) 0;
+}
+
+.login-required p {
+    margin-bottom: var(--space-sm);
+    font-size: 0.875rem;
+    color: var(--secondary-light);
+}
+
+.btn-login-required {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    padding: var(--space-sm) var(--space-md);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-xs);
+    margin-bottom: var(--space-sm);
+    width: 100%;
+}
+
+.btn-login-required:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(116, 156, 160, 0.3);
+}
+
+.register-link {
+    font-size: 0.8125rem;
+    color: var(--secondary-light);
+}
+
+.register-link a {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+/* Sin resultados */
+.sin-resultados {
+    text-align: center;
+    padding: var(--space-xl) var(--space-md);
+    grid-column: 1 / -1;
+}
+
+.no-results-img {
+    max-width: 200px;
+    margin: 0 auto var(--space-md);
+    opacity: 0.7;
+}
+
+.sin-resultados h3 {
+    margin-bottom: var(--space-sm);
+    color: var(--secondary-color);
+}
+
+.sin-resultados p {
+    color: var(--secondary-light);
+}
+
+.sin-resultados a {
+    color: var(--primary-color);
+    font-weight: 500;
+}
+
+.sin-resultados a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .filtros-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .range-group {
+        grid-column: auto;
+    }
+    
+    .resultados-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ==================== MIS CITAS STYLES ==================== */
+
+.mis-citas-section {
+    padding: var(--space-xl) 0;
+}
+
+.mis-citas-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-xl);
+    flex-wrap: wrap;
+    gap: var(--space-md);
+}
+
+.mis-citas-header h1 {
+    font-size: 2rem;
+    color: var(--secondary-color);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.mis-citas-header h1 i {
+    color: var(--primary-color);
+}
+
+.btn-nueva-cita {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: var(--space-sm) var(--space-lg);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.btn-nueva-cita:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(116, 156, 160, 0.3);
+}
+
+/* Sin citas */
+.sin-citas {
+    background-color: var(--primary-extra-light);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    text-align: center;
+    margin-bottom: var(--space-xl);
+}
+
+.sin-citas-content {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.sin-citas-img {
+    max-width: 200px;
+    margin: 0 auto var(--space-lg);
+    opacity: 0.8;
+}
+
+.sin-citas h3 {
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+    margin-bottom: var(--space-sm);
+}
+
+.sin-citas p {
+    color: var(--secondary-light);
+    margin-bottom: var(--space-lg);
+}
+
+/* Secciones de citas */
+.seccion-titulo {
+    font-size: 1.5rem;
+    color: var(--secondary-color);
+    margin-bottom: var(--space-lg);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    position: relative;
+    padding-bottom: var(--space-sm);
+}
+
+.seccion-titulo::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background-color: var(--primary-color);
+}
+
+.seccion-titulo i {
+    color: var(--primary-color);
+}
+
+.badge-contador {
+    background-color: var(--primary-color);
+    color: var(--white);
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+/* Grid de citas */
+.citas-grid, .historial-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--space-lg);
+    margin-bottom: var(--space-xl);
+}
+
+/* Tarjeta de cita */
+.cita-card {
+    background-color: var(--white);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.cita-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+.cita-card-header {
+    display: flex;
+    align-items: center;
+    padding: var(--space-md);
+    background-color: var(--primary-extra-light);
+    border-bottom: 1px solid var(--medium-gray);
+    gap: var(--space-md);
+}
+
+.especialista-avatar {
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-color);
+    font-size: 1.25rem;
+}
+
+.especialista-info {
+    flex: 1;
+}
+
+.especialista-info h3 {
+    font-size: 1.125rem;
+    margin-bottom: var(--space-xs);
+}
+
+.especialidad-badge {
+    display: inline-block;
+    background-color: var(--primary-light);
+    color: var(--primary-dark);
+    padding: 0.25rem var(--space-sm);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.cita-detalles {
+    padding: var(--space-md);
+    flex-grow: 1;
+}
+
+.detalle-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    margin-bottom: var(--space-md);
+}
+
+.detalle-item:last-child {
+    margin-bottom: 0;
+}
+
+.detalle-item i {
+    color: var(--primary-color);
+    width: 1.5rem;
+    text-align: center;
+    font-size: 1rem;
+}
+
+.detalle-label {
+    display: block;
+    font-size: 0.75rem;
+    color: var(--secondary-light);
+    margin-bottom: 0.1rem;
+}
+
+.detalle-valor {
+    font-weight: 500;
+    font-size: 0.9375rem;
+}
+
+/* Estados de cita */
+.cita-estado {
+    padding: var(--space-sm) var(--space-md);
+    font-size: 0.875rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+}
+
+.estado-pendiente {
+    background-color: #FFF3E0;
+    color: #E65100;
+    border-top: 1px solid #FFE0B2;
+}
+
+.estado-confirmada {
+    background-color: #E8F5E9;
+    color: #2E7D32;
+    border-top: 1px solid #C8E6C9;
+}
+
+.estado-cancelada {
+    background-color: #FFEBEE;
+    color: #C62828;
+    border-top: 1px solid #FFCDD2;
+}
+
+/* Acciones */
+.cita-acciones {
+    padding: var(--space-md);
+    border-top: 1px solid var(--medium-gray);
+}
+
+.btn-cancelar {
+    width: 100%;
+    background-color: transparent;
+    color: #E53935;
+    border: 1px solid #E53935;
+    padding: var(--space-sm);
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+}
+
+.btn-cancelar:hover {
+    background-color: #FFEBEE;
+}
+
+/* Historial */
+.historial .cita-card-header {
+    background-color: var(--secondary-extra-light);
+}
+
+.historial .especialista-avatar {
+    background-color: var(--medium-gray);
+    color: var(--secondary-light);
+}
+
+.historial .especialidad-badge {
+    background-color: var(--medium-gray);
+    color: var(--secondary-light);
+}
