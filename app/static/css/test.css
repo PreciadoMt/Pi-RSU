@@ -1,0 +1,218 @@
+:root {
+    --color-primary: #0d9488;
+    --color-primary-dark: #0f766e;
+    --color-secondary: #e2e8f0;
+    --color-text: #334155;
+    --color-text-light: #64748b;
+    --color-bg: #f8fafc;
+    --color-white: #ffffff;
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --radius-md: 0.5rem;
+    --radius-lg: 1rem;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.5;
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.header-test {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--color-white);
+    box-shadow: var(--shadow-sm);
+    position: fixed;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.logo img {
+    width: 50px;
+    height: auto;
+}
+
+.titulo-mentalbalance {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--color-primary-dark);
+}
+
+.contenedor-principal {
+    width: 100%;
+    max-width: 800px;
+    margin: 6rem auto 3rem;
+    padding: 0 1.5rem;
+}
+
+.indicador-progreso {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.barra-progreso {
+    flex-grow: 1;
+    height: 8px;
+    background-color: var(--color-secondary);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progreso {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(to right, var(--color-primary), var(--color-primary-dark));
+    transition: width 0.4s ease-out;
+}
+
+.contador-preguntas {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-primary-dark);
+    min-width: 40px;
+    text-align: center;
+}
+
+.contenedor-test {
+    background-color: var(--color-white);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+    box-shadow: var(--shadow-md);
+}
+
+.pregunta {
+    display: none;
+}
+
+.pregunta.visible {
+    display: block;
+}
+
+.pregunta-texto {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--color-primary-dark);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.opciones {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.opcion {
+    padding: 1rem;
+    background-color: var(--color-white);
+    border: 2px solid var(--color-secondary);
+    border-radius: var(--radius-md);
+    color: var(--color-text);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.opcion:hover {
+    border-color: #99f6e4;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.opcion.activa {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: var(--color-white);
+}
+
+.botones-navegacion {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    gap: 1rem;
+}
+
+.btn-volver, .btn-continuar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-volver {
+    background-color: var(--color-white);
+    color: var(--color-text-light);
+    border: 2px solid #cbd5e1;
+}
+
+.btn-volver:hover {
+    background-color: #f8fafc;
+    border-color: #94a3b8;
+}
+
+.btn-continuar {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border: none;
+}
+
+.btn-continuar:hover {
+    background-color: var(--color-primary-dark);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-continuar:disabled {
+    background-color: #cbd5e1;
+    color: #94a3b8;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
+@media (max-width: 640px) {
+    .contenedor-principal {
+        margin-top: 5rem;
+        padding: 0 1rem;
+    }
+    
+    .contenedor-test {
+        padding: 1.5rem;
+    }
+    
+    .pregunta-texto {
+        font-size: 1.1rem;
+    }
+    
+    .opcion {
+        padding: 0.75rem;
+        font-size: 0.9rem;
+    }
+    
+    .botones-navegacion {
+        margin-top: 1.5rem;
+    }
+}

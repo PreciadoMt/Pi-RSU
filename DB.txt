@@ -1,9 +1,8 @@
-
------//Recuerden cambiar los valores de config por los de su mysql
-
+DROP DATABASE IF EXISTS MentalBalance;
 CREATE DATABASE MentalBalance;
 USE MentalBalance;
 
+-- Tabla de usuarios
 CREATE TABLE usuarios (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nombre VARCHAR(50) NOT NULL,
@@ -14,6 +13,7 @@ CREATE TABLE usuarios (
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Tabla de especialistas
 CREATE TABLE especialistas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
@@ -34,43 +34,54 @@ CREATE TABLE especialistas (
         'Psicología organizacional',
         'Otra'
     ) NOT NULL,
+    modelo_terapeutico ENUM(
+        'Cognitivo-Conductual',
+        'Psicoanalítico',
+        'Humanista',
+        'Sistémico',
+        'Integrativo',
+        'Otro'
+    ) NULL,
     años_experiencia ENUM('1-3', '4-6', '7-10', '10+') NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    precio DECIMAL(8,2) NOT NULL DEFAULT 400.00,
     verificado BOOLEAN DEFAULT TRUE,
     creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    modelo_terapeutico ENUM(
-		'Cognitivo-Conductual',
-		'Psicoanalítico',
-		'Humanista',
-		'Sistémico',
-		'Gestalt',
-		'Integrativo',
-		'Otro'
-	) NOT NULL DEFAULT 'Cognitivo-Conductual',
-	precio DECIMAL(8,2) NOT NULL DEFAULT 500.00
+    foto_perfil VARCHAR(255) NULL,
+    descripcion TEXT NULL
 );
 
-CREATE TABLE CitasDisponibles (
+-- Tabla de disponibilidad de especialistas
+CREATE TABLE disponibilidad (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    id_especialista INT NOT NULL,
-    fecha DATE NOT NULL,
-    hora TIME NOT NULL,
-    disponible BOOLEAN DEFAULT TRUE,
-    FOREIGN KEY (id_especialista) REFERENCES especialistas(id) ON DELETE CASCADE
+    especialista_id INT NOT NULL,
+    dia ENUM('Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo') NOT NULL,
+    hora_inicio TIME NOT NULL,
+    hora_fin TIME NOT NULL,
+    duracion_sesion INT NOT NULL DEFAULT 50 COMMENT 'Duración en minutos',
+    pausa_entre_sesiones INT NOT NULL DEFAULT 10 COMMENT 'Minutos entre sesiones',
+    FOREIGN KEY (especialista_id) REFERENCES especialistas(id) ON DELETE CASCADE,
+    CONSTRAINT chk_horario_valido CHECK (hora_fin > hora_inicio),
+    CONSTRAINT chk_duracion_valida CHECK (duracion_sesion BETWEEN 30 AND 120)
 );
 
-CREATE TABLE CitasAgendadas (
+-- Tabla de citas
+CREATE TABLE citas (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    id_usuario INT NOT NULL,
-    id_especialista INT NOT NULL,
+    usuario_id INT NOT NULL,
+    especialista_id INT NOT NULL,
     fecha DATE NOT NULL,
-    hora TIME NOT NULL,
-    estado ENUM('pendiente', 'confirmada', 'completada', 'cancelada') DEFAULT 'pendiente',
-    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_usuario) REFERENCES usuarios(id) ON DELETE CASCADE,
-    FOREIGN KEY (id_especialista) REFERENCES especialistas(id) ON DELETE CASCADE
+    hora_inicio TIME NOT NULL,
+    hora_fin TIME NOT NULL,
+    motivo_consulta TEXT NULL,
+    estado ENUM('pendiente', 'confirmada', 'completada', 'cancelada', 'rechazada') DEFAULT 'pendiente',
+    notas TEXT NULL,
+    creada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    actualizada_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (especialista_id) REFERENCES especialistas(id) ON DELETE CASCADE,
+    INDEX idx_fecha_hora (fecha, hora_inicio),
+    INDEX idx_especialista_fecha (especialista_id, fecha)
 );
 
 
-SELECT * FROM CitasAgendadas;
-
+select*from especialistas;

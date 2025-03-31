@@ -7,6 +7,7 @@
     <link rel="icon" href="{{ url_for('static', filename='img/logo.png') }}" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
@@ -33,8 +34,8 @@
                     <h1 class="hero__title">ENCUENTRA AL PSICÓLOGO IDEAL PARA TI Y LOS QUE QUIERES</h1>
                     <p class="hero__subtitle">Conéctate con expertos en salud mental desde la comodidad de tu hogar.</p>
                     <div class="hero__buttons">
-                        <a href="#" class="hero__primary-btn">VER TODOS LOS PSICÓLOGOS</a>
-                        <a href="#" class="hero__secondary-btn">REALIZAR TEST</a>
+                        <a href="{{ url_for('citas.catalogo_citas') }}" class="hero__primary-btn">VER TODOS LOS PSICÓLOGOS</a>
+                        <a href="{{ url_for('general.test') }}" class="hero__secondary-btn">REALIZAR TEST</a>
                     </div>
                 </div>
                 <div class="hero__image">
@@ -174,7 +175,7 @@
             <p class="final-cta__subtitle">El primer paso es el más importante. Estamos aquí para ayudarte.</p>
             <div class="final-cta__buttons">
                 <a href="{{ url_for('auth.registro') }}" class="final-cta__primary-btn">Regístrate gratis</a>
-                <a href="#" class="final-cta__secondary-btn">Ver especialistas</a>
+                <a href="{{ url_for('citas.catalogo_citas') }}" class="final-cta__secondary-btn">Ver especialistas</a>
             </div>
         </div>
     </section>
