@@ -20,4 +20,4 @@ class Usuario(Base):
     creado_en = Column(TIMESTAMP, default=datetime.utcnow)
     
     citas = relationship("Cita", back_populates="usuario")
-
+    # autoevaluaciones = relationship('Autoevaluacion', back_populates='usuario')
