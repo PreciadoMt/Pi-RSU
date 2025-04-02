@@ -1,5 +1,6 @@
-from .DBM_loockups import Roles_Usuarios, Generos, Especialidades, Consultorios, Tipos_Citas, Estatus
-from .DBM_Usuarios import Usuarios
-
-# Opcional: Lista explícita para facilitar imports
-__all__ = ['Roles_Usuarios', 'Generos', 'Especialidades', 'Consultorios', 'Tipos_Citas', 'Estatus', 'Usuarios']
+from .DBM_Usuarios import *
+from .DBM_Citas import *
+from .DBM_Disponibilidad import *
+from .DBM_Especialista import *
+from .DBM_Evaluaciones import *
+from .DBM_Recomendaciones import *
