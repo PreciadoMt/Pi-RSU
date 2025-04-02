@@ -2,7 +2,6 @@
 # es decir, un archivo de models por tabla para ubicarlas mas facilmente
 #atributos de las tablas en minusculas, nombres de las tablas empezar por mayuscula y en plural
 #ademas el nombre de la tabla dentro de la clase empezara con "tb_<nombre de la tabla>"
-
 from DB.conexion import Base
 from sqlalchemy import (create_engine, Column, Integer, String, ForeignKey, DECIMAL, Boolean, Enum, Text, TIMESTAMP, Date, Time)
 from sqlalchemy.orm import relationship, declarative_base
