@@ -30,3 +30,11 @@ def profesionales():
 @general_bp.route('/test')
 def test():
     return render_template('general/test.html') 
+
+@general_bp.route('/test2')
+def test2():
+    return render_template('general/test2.html') 
+
+@general_bp.route('/prediagnnostico')
+def prediagnostico():
+    return render_template('general/prediagnostico.html') 
