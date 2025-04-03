@@ -16,6 +16,7 @@ class Especialista(Base):
     email = Column(String(120), unique=True, nullable=False)
     genero = Column(Enum('masculino', 'femenino', 'otro', 'prefiero_no_decir'), nullable=False)
     licencia = Column(String(50), unique=True, nullable=False)
+    password = Column(String(8))
     especialidad = Column(Enum(
         'Psicología clínica', 'Psiquiatría', 'Terapia cognitivo-conductual', 'Psicoanálisis',
         'Terapia familiar', 'Terapia de pareja', 'Neuropsicología', 'Psicología infantil',

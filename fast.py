@@ -22,6 +22,17 @@ def main():
 def Crear_u(usuario_nuevo:ModelUsuario):
     db = Session()
     try:
+        
+        consulta = db.query(Usuario).filter(Usuario.email == usuario_nuevo.email).first()
+        if consulta:
+            return JSONResponse(status_code=201,content={"Mensaje":"Correo Ya registrado"})
+        
+        
+        if usuario_nuevo.google_id:  
+            consulta2 = db.query(Usuario).filter(Usuario.google_id == usuario_nuevo.google_id).first()
+            if consulta2:
+                return JSONResponse(status_code=201, content={"Mensaje": "Google ID ya registrado"})
+            
         db.add(Usuario(**usuario_nuevo.model_dump()))
         db.commit()
         return JSONResponse(status_code=201,
@@ -38,8 +49,9 @@ def Crear_u(usuario_nuevo:ModelUsuario):
                              })
     finally:
         db.close()
+ 
 # ---------------Crear un nuevo especialista -----------------------------
-@app.post("/Crear_Esp/", response_model=ModelEspecialista, tags=['Especialista'])
+@app.post("/Crear_Esp/", response_model=ModelEspecialista, tags=['Especialistas'])
 def Crear_e(esp_nuevo:ModelEspecialista):
     db = Session()
     try:

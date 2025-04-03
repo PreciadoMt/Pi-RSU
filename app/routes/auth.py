@@ -106,48 +106,47 @@ def registro():
 
         # Validaciones
         if not all([nombre, apellido, email, password, confirm_password]):
-            flash('Todos los campos son obligatorios', 'danger')
-            return redirect(url_for('auth.registro'))
+            return jsonify({'Mensaje': 'Todos los campos son obligatorios'}), 400
 
         if not accept_terms:
-            flash('Debes aceptar los términos y condiciones', 'danger')
-            return redirect(url_for('auth.registro'))
+            return jsonify({'Mensaje': 'Debes aceptar los términos y condiciones'}), 400
 
         if password != confirm_password:
-            flash('Las contraseñas no coinciden', 'danger')
-            return redirect(url_for('auth.registro'))
+            return jsonify({'Mensaje': 'Las contraseñas no coinciden'}), 400
 
         if len(password) < 8:
-            flash('La contraseña debe tener al menos 8 caracteres', 'danger')
-            return redirect(url_for('auth.registro'))
+            return jsonify({'Mensaje': 'La contraseña debe tener al menos 8 caracteres'}), 400
 
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-            flash('Email no válido', 'danger')
-            return redirect(url_for('auth.registro'))
+            return jsonify({'Mensaje': 'Email no válido'}), 400
 
+        especialista_data_u = {
+            "nombre": nombre,
+            "apellido": apellido,
+            "email": email,
+            "password": password,
+        }
+
+        
+        especialista_json_u = json.dumps(especialista_data_u)
+        print(especialista_json_u)
+        # Enviar datos a FastAPI
         try:
-            # Verificar si el email ya existe
-            cur = mysql.connection.cursor()
-            cur.execute("SELECT email FROM usuarios WHERE email = %s UNION SELECT email FROM especialistas WHERE email = %s", (email, email))
-            if cur.fetchone():
-                flash('Este email ya está registrado', 'danger')
-                return redirect(url_for('auth.registro'))
+            url = "http://127.0.0.1:9080/Crear_Usuario/"  # Reemplázalo con la URL de tu API
+            headers = {'Content-Type': 'application/json'}
+            response = requests.post(url, data=especialista_json_u, headers=headers)
 
-            # Insertar nuevo usuario
-            hashed_pw = generate_password_hash(password)
-            cur.execute(
-                "INSERT INTO usuarios (nombre, apellido, email, password) VALUES (%s, %s, %s, %s)",
-                (nombre, apellido, email, hashed_pw)
-            )
-            mysql.connection.commit()
-            cur.close()
+            if response.status_code == 200:
+                flash('Registro exitoso', 'success')
+            else:
+                flash(f'Error en la API: {response.text}', 'danger')
 
-            flash('¡Registro exitoso! Por favor inicia sesión', 'success')
-            return redirect(url_for('auth.login'))
+        except requests.exceptions.RequestException as e:
+            flash(f'Error al conectar con la API: {str(e)}', 'danger')
 
         except Exception as e:
             mysql.connection.rollback()
-            flash('Error en el servidor: ' + str(e), 'danger')
+            return jsonify({'Mensaje': 'Error en el servidor: ' + str(e)}), 500
 
     return render_template('auth/registro.html')
 
@@ -195,6 +194,7 @@ def registro_especialista():
             "email": email,
             "genero": genero,
             "licencia": licencia,
+            "password": password,   
             "especialidad": especialidad,
             "años_experiencia": años_experiencia,
             "precio": precio

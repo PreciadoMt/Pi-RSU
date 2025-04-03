@@ -39,6 +39,7 @@ class ModelEspecialista(BaseModel):
     email: EmailStr = Field(..., example="especialista@correo.com")
     genero: str = Field(..., pattern="^(masculino|femenino|otro|prefiero_no_decir)$", description="Debe ser un valor válido.")
     licencia: str = Field(..., min_length=5, max_length=50, description="Número de licencia único.")
+    password: str = Field(..., min_length=8, max_length=16)
     especialidad: EspecialidadEnum
     modelo_terapeutico: Optional[ModeloTerapeuticoEnum] = Field(None, description="Enfoque terapéutico.")
     años_experiencia: AnosExperienciaEnum
