@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app import mysql
 import re
 import os
+import json
 import pathlib
 import requests
 from google.oauth2 import id_token
@@ -160,13 +161,14 @@ def registro_especialista():
         genero = request.form['gender']
         licencia = request.form['license'].strip()
         especialidad = request.form['specialization']
-        experiencia = request.form['experience']
+        años_experiencia = request.form['experience']
         password = request.form['password']
+        precio = int(request.form['precio'])
         confirm_password = request.form['confirm_password']
         accept_terms = request.form.get('accept_terms') == 'on'
 
         # Validaciones
-        if not all([nombre, apellido, email, genero, licencia, especialidad, experiencia, password, confirm_password]):
+        if not all([nombre, apellido, email, genero, licencia, especialidad, años_experiencia, password, confirm_password]):
             flash('Todos los campos son obligatorios', 'danger')
             return redirect(url_for('auth.registro_especialista'))
 
@@ -186,40 +188,37 @@ def registro_especialista():
             flash('Email no válido', 'danger')
             return redirect(url_for('auth.registro_especialista'))
 
+        # Crear diccionario JSON
+        especialista_data = {
+            "nombre": nombre,
+            "apellido": apellido,
+            "email": email,
+            "genero": genero,
+            "licencia": licencia,
+            "especialidad": especialidad,
+            "años_experiencia": años_experiencia,
+            "precio": precio
+        }
+
+        
+        especialista_json = json.dumps(especialista_data)
+        print(especialista_json)
+        # Enviar datos a FastAPI
         try:
-            cur = mysql.connection.cursor()
-            
-            # Verificar si el email ya existe en usuarios o especialistas
-            cur.execute("SELECT email FROM usuarios WHERE email = %s UNION SELECT email FROM especialistas WHERE email = %s", (email, email))
-            if cur.fetchone():
-                flash('Este email ya está registrado', 'danger')
-                return redirect(url_for('auth.registro_especialista'))
+            url = "http://127.0.0.1:9080/Crear_Esp/"  # Reemplázalo con la URL de tu API
+            headers = {'Content-Type': 'application/json'}
+            response = requests.post(url, data=especialista_json, headers=headers)
 
-            # Verificar si la licencia ya existe
-            cur.execute("SELECT licencia FROM especialistas WHERE licencia = %s", (licencia,))
-            if cur.fetchone():
-                flash('Esta licencia profesional ya está registrada', 'danger')
-                return redirect(url_for('auth.registro_especialista'))
+            if response.status_code == 200:
+                flash('Registro exitoso', 'success')
+            else:
+                flash(f'Error en la API: {response.text}', 'danger')
 
-            # Insertar nuevo especialista
-            hashed_pw = generate_password_hash(password)
-            cur.execute(
-                """INSERT INTO especialistas 
-                (nombre, apellido, email, genero, licencia, especialidad, años_experiencia, password) 
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
-                (nombre, apellido, email, genero, licencia, especialidad, experiencia, hashed_pw)
-            )
-            mysql.connection.commit()
-            cur.close()
-
-            flash('¡Registro exitoso! Tu cuenta está pendiente de verificación', 'success')
-            return redirect(url_for('auth.login'))
-
-        except Exception as e:
-            mysql.connection.rollback()
-            flash('Error en el servidor: ' + str(e), 'danger')
+        except requests.exceptions.RequestException as e:
+            flash(f'Error al conectar con la API: {str(e)}', 'danger')
 
     return render_template('auth/registroEspecialista.html')
+
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():

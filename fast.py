@@ -76,7 +76,7 @@ def Crear_e(esp_nuevo:ModelEspecialista):
     finally:
         db.close()
 
-@app.get("/generar_horarios_disponibles/", response_model=ModelUsuario,tags=['Usuarios'])
+@app.get("/filtrar_especialista/", response_model=ModelUsuario,tags=['Especialistas'])
 def Crear_u():
     db=Session()
   

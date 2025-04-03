@@ -42,8 +42,8 @@ class ModelEspecialista(BaseModel):
     especialidad: EspecialidadEnum
     modelo_terapeutico: Optional[ModeloTerapeuticoEnum] = Field(None, description="Enfoque terapéutico.")
     años_experiencia: AnosExperienciaEnum
-    precio: float = Field(..., ge=0, le=10000, description="Precio debe ser un número positivo.")
-    verificado: bool = Field(default=True, description="Indica si el especialista está verificado")
+    precio: Optional[float] = Field(None, ge=0, le=10000, description="Precio debe ser un número positivo.")
+    verificado: Optional[bool] = Field(default=True, description="Indica si el especialista está verificado")
     foto_perfil: Optional[str] = Field(None, description="URL de la imagen de perfil.")
     descripcion: Optional[str] = Field(None, description="Descripción del especialista.")
 
