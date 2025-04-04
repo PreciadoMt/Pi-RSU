@@ -305,6 +305,7 @@ ul {
     font-size: 1rem;
     border: 2px solid var(--primary-color);
     transition: all 0.3s ease;
+    text-align: center;
 }
 
 .hero__secondary-btn:hover {
