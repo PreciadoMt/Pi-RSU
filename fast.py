@@ -224,7 +224,3 @@ if __name__ == "__main__":
     import uvicorn
     uvicorn.run("fast:app", host="127.0.0.1", port=9080, reload=True)
 
-# {
-#   "email": "gris_bebe@live.com.mx",
-#   "password": "123456789"
-# }
