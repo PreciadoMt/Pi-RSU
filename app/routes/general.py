@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, flash
+from .auth import token_required
 
 general_bp = Blueprint('general', __name__)
 
@@ -23,17 +24,16 @@ def nosotros():
     return render_template('general/nosotros.html') 
 
 @general_bp.route('/profesionales')
+@token_required
 def profesionales():
     return render_template('general/profesionales.html') 
 
 
 @general_bp.route('/test')
+@token_required
 def test():
     return render_template('general/test.html') 
 
-@general_bp.route('/test2')
-def test2():
-    return render_template('general/test2.html') 
 
 @general_bp.route('/prediagnnostico')
 def prediagnostico():

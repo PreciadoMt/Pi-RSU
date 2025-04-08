@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for,
 from app import mysql
 from datetime import datetime, date, timedelta
 import json
-
+from app.routes.auth import token_required
 citas_bp = Blueprint('citas', __name__)
 
 def generar_horarios_disponibles(id_especialista, fecha):
@@ -171,6 +171,7 @@ def cancelar_cita(cita_id):
     return redirect(url_for('citas.mis_citas'))
 
 @citas_bp.route('/mis-citas')
+@token_required
 def mis_citas():
     if not session.get('user_id'):
         flash('Debes iniciar sesión para ver tus citas', 'danger')
