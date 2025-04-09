@@ -2,113 +2,91 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <title>Test Prediagnóstico | MentalBalance</title>
+    <meta name="description" content="Realiza nuestro test prediagnóstico para evaluar tu salud mental">
+    <link rel="icon" href="{{ url_for('static', filename='img/logo.png') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test - MentalBalance</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/test.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        .test-container {
+            text-align: center;
+            padding: 60px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .test-title {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .test-description {
+            font-size: 1.1rem;
+            color: #34495e;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+        
+        .test-image {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .test-btn {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .test-btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+    </style>
 </head>
 <body>
-    <header class="header-test" onclick="window.location.href='{{ url_for('general.inicio') }}'" style="cursor: pointer;">
-        <div class="logo">
-            <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo MentalBalance">
-        </div>
-        <h1 class="titulo-mentalbalance">MentalBalance</h1>
-    </header>
-
-    <main class="contenedor-principal">
-        <div class="indicador-progreso">
-            <div class="barra-progreso">
-                <div class="progreso" id="progreso"></div>
+    {% include 'layouts/navbar.html' %}
+    
+    <!-- Mensajes Flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             </div>
-            <span class="contador-preguntas" id="contador-preguntas">1/6</span>
-        </div>
+        {% endif %}
+    {% endwith %}
 
-        <div class="contenedor-test">
-            <form id="formulario-test">
-                <!-- Pregunta 1 -->
-                <div class="pregunta visible" data-index="0">
-                    <p class="pregunta-texto">¿Cuál es tu rango de edad?</p>
-                    <div class="opciones">
-                        <button type="button" class="opcion">Menos de 18 años</button>
-                        <button type="button" class="opcion">18-25 años</button>
-                        <button type="button" class="opcion">26-35 años</button>
-                        <button type="button" class="opcion">36-50 años</button>
-                        <button type="button" class="opcion">Más de 50 años</button>
-                    </div>
-                </div>
+    <!-- Test Section -->
+    <section class="test-container">
+        <h1 class="test-title">Test Prediagnóstico de Salud Mental</h1>
+        <p class="test-description">
+            Nuestro test prediagnóstico te ayudará a identificar áreas de tu bienestar emocional que podrían necesitar atención. 
+            Es rápido, confidencial y te proporcionará información valiosa para entender mejor tu estado actual.
+        </p>
+        <img src="{{ url_for('static', filename='img/test-image.jpg') }}" alt="Test de salud mental" class="test-image">
+        <a href="{{ url_for('general.prediagnostico') }}" class="test-btn">COMENZAR TEST</a>
+    </section>
 
-                <!-- Pregunta 2 -->
-                <div class="pregunta" data-index="1">
-                    <p class="pregunta-texto">¿Qué tipo de terapia prefieres?</p>
-                    <div class="opciones">
-                        <button type="button" class="opcion">Terapia individual</button>
-                        <button type="button" class="opcion">Terapia de pareja</button>
-                        <button type="button" class="opcion">Terapia familiar</button>
-                        <button type="button" class="opcion">Terapia grupal</button>
-                    </div>
-                </div>
-
-                <!-- Pregunta 3 -->
-                <div class="pregunta" data-index="2">
-                    <p class="pregunta-texto">¿Qué temas te gustaría abordar en terapia?</p>
-                    <div class="opciones">
-                        <button type="button" class="opcion">Ansiedad o estrés</button>
-                        <button type="button" class="opcion">Depresión o duelo</button>
-                        <button type="button" class="opcion">Problemas de relaciones personales</button>
-                        <button type="button" class="opcion">Crecimiento personal</button>
-                        <button type="button" class="opcion">Adicciones</button>
-                    </div>
-                </div>
-
-                <!-- Pregunta 4 -->
-                <div class="pregunta" data-index="3">
-                    <p class="pregunta-texto">¿Cuál es tu preferencia en la forma de la terapia?</p>
-                    <div class="opciones">
-                        <button type="button" class="opcion">Terapia presencial</button>
-                        <button type="button" class="opcion">Terapia en línea</button>
-                        <button type="button" class="opcion">Ambas opciones me funcionan</button>
-                    </div>
-                </div>
-
-                <!-- Pregunta 5 -->
-                <div class="pregunta" data-index="4">
-                    <p class="pregunta-texto">¿Prefieres un psicólogo de algún género en particular?</p>
-                    <div class="opciones">
-                        <button type="button" class="opcion">Prefiero que sea hombre</button>
-                        <button type="button" class="opcion">Prefiero que sea mujer</button>
-                        <button type="button" class="opcion">Indiferente</button>
-                    </div>
-                </div>
-
-                <!-- Pregunta 6 -->
-                <div class="pregunta" data-index="5">
-                    <p class="pregunta-texto">¿Cuál es tu disponibilidad para las sesiones?</p>
-                    <div class="opciones">
-                        <button type="button" class="opcion">Mañanas</button>
-                        <button type="button" class="opcion">Tardes</button>
-                        <button type="button" class="opcion">Noches</button>
-                        <button type="button" class="opcion">Fines de semana</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-
-        <div class="botones-navegacion">
-            <button id="btn-volver" class="btn-volver" type="button" style="display: none;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
-                </svg>
-                Volver
-            </button>
-            <button id="btn-continuar" class="btn-continuar" type="button" disabled>
-                Continuar
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-                </svg>
-            </button>
-        </div>
-    </main>
-
-    <script src="{{ url_for('static', filename='js/test.js') }}"></script>
+    {% include 'layouts/footer.html' %}
 </body>
 </html>

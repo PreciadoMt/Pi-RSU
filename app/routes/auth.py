@@ -1,8 +1,9 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session, abort
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session, abort, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 from app import mysql
 import re
 import os
+import json
 import pathlib
 import requests
 from google.oauth2 import id_token
@@ -10,8 +11,39 @@ from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
 import google.auth.transport.requests
 from pathlib import Path
+import jwt
+from functools import wraps
+from colorama import Fore, Style
+
+SECRET_KEY = 'pswd'
+ALGORITHM = 'HS256'
 
 auth_bp = Blueprint('auth', __name__)
+
+
+#------------------configuracion de token de seguridad con decoradores---------#
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = session.get('access_token')
+        if not token:
+            return jsonify({'Mensaje': 'Token de acceso requerido'}), 401
+
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            session['user_id'] = payload['sub']
+            
+            if 'google_id' in payload:
+                session['google_id'] = payload['google_id']  # Almacenar en la sesión si lo necesitas
+
+        except jwt.ExpiredSignatureError:
+            return jsonify({'Mensaje': 'Token expirado'}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({'Mensaje': 'Token inválido'}), 401
+
+        return f(*args, **kwargs)
+
+    return decorated
 
 # Solo para desarrollo - quitar en producción
 os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
@@ -55,41 +87,58 @@ def callback():
     
     email = id_info.get("email")
     name = id_info.get("name")
+    google_id = id_info.get("sub")
     
     try:
-        cur = mysql.connection.cursor()
+        flash(f'¡Bienvenido/a {name}! Has iniciado sesión con Google.', 'success')
         
-        # Verificar si el usuario ya existe
-        cur.execute("SELECT * FROM usuarios WHERE email = %s", (email,))
-        user = cur.fetchone()
+        print(f"Google ID: {google_id}")
+        print(f"Email: {email}")
+        print(f"Name: {name}")
+
+        partes = name.split(' ')
+        nombre = partes[0]
+        apellido = ' '.join(partes[1:]) if len(partes) > 1 else ''  
+
+        usuario_json_google = {
+            "google_id": google_id,
+            "email": email,
+            "nombre": nombre,
+            "apellido": apellido,
+            "password": ""
+        }
+
+        url = "http://127.0.0.1:9080/Iniciar_Sesion_Google/"
+        headers = {'Content-Type': 'application/json'}
         
-        if not user:
-            # Dividir el nombre en nombre y apellido
-            nombre, apellido = (name.split(' ', 1) + [''])[:2]  # Asegura que siempre haya 2 elementos
-            
-            # Crear nuevo usuario con contraseña aleatoria
-            cur.execute(
-                "INSERT INTO usuarios (nombre, apellido, email, password) VALUES (%s, %s, %s, %s)",
-                (nombre, apellido, email, generate_password_hash(os.urandom(24).hex()))
-            )
-            mysql.connection.commit()
-            cur.execute("SELECT * FROM usuarios WHERE email = %s", (email,))
-            user = cur.fetchone()
+        response = requests.post(url, json=usuario_json_google, headers=headers)
         
-        # Configurar sesión
-        session['user_id'] = user['id']
-        session['user_email'] = user['email']
-        session['user_name'] = f"{user['nombre']} {user['apellido']}"
-        session['user_type'] = 'usuario'
-        flash(f'¡Bienvenido/a {user["nombre"]}! Has iniciado sesión con Google', 'success')
+        # Verificar si la respuesta es exitosa (código 200)
+        #aqio se valido el usuario
+        if response.status_code == 200:
+            session['access_token'] = response.json().get('access_token')
+            session['google_id'] = google_id
+            session['user_email'] = email
+            session['user_name'] = f"{nombre} {apellido}"
+
+            print(Fore.BLUE + "Usuario JSON: " + str(usuario_json_google) + Style.RESET_ALL)
+            return redirect(url_for('general.inicio'))
         
-        return redirect(url_for('general.inicio'))
-    
+        
+        # Verificar si la respuesta es exitosa (código 201)
+        #aqio se vcreo un nuevo usuario
+        elif response.status_code == 201:
+            session['access_token'] = response.json().get('access_token')
+            session['google_id'] = google_id
+            session['user_email'] = email
+            session['user_name'] = f"{nombre} {apellido}"
+
+            print(Fore.BLUE + "Usuario JSON: " + str(usuario_json_google) + Style.RESET_ALL)
+            return redirect(url_for('general.inicio'))
+
     except Exception as e:
-        mysql.connection.rollback()
         flash(f'Error durante el login con Google: {str(e)}', 'danger')
         return redirect(url_for('auth.login'))
-
 
 @auth_bp.route('/registro', methods=['GET', 'POST'])
 def registro():
@@ -104,48 +153,47 @@ def registro():
 
         # Validaciones
         if not all([nombre, apellido, email, password, confirm_password]):
-            flash('Todos los campos son obligatorios', 'danger')
-            return redirect(url_for('auth.registro'))
+            return jsonify({'Mensaje': 'Todos los campos son obligatorios'}), 400
 
         if not accept_terms:
-            flash('Debes aceptar los términos y condiciones', 'danger')
-            return redirect(url_for('auth.registro'))
+            return jsonify({'Mensaje': 'Debes aceptar los términos y condiciones'}), 400
 
         if password != confirm_password:
-            flash('Las contraseñas no coinciden', 'danger')
-            return redirect(url_for('auth.registro'))
+            return jsonify({'Mensaje': 'Las contraseñas no coinciden'}), 400
 
         if len(password) < 8:
-            flash('La contraseña debe tener al menos 8 caracteres', 'danger')
-            return redirect(url_for('auth.registro'))
+            return jsonify({'Mensaje': 'La contraseña debe tener al menos 8 caracteres'}), 400
 
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-            flash('Email no válido', 'danger')
-            return redirect(url_for('auth.registro'))
+            return jsonify({'Mensaje': 'Email no válido'}), 400
 
+        especialista_data_u = {
+            "nombre": nombre,
+            "apellido": apellido,
+            "email": email,
+            "password": password,
+        }
+
+        
+        especialista_json_u = json.dumps(especialista_data_u)
+        print(especialista_json_u)
+        # Enviar datos a FastAPI
         try:
-            # Verificar si el email ya existe
-            cur = mysql.connection.cursor()
-            cur.execute("SELECT email FROM usuarios WHERE email = %s UNION SELECT email FROM especialistas WHERE email = %s", (email, email))
-            if cur.fetchone():
-                flash('Este email ya está registrado', 'danger')
-                return redirect(url_for('auth.registro'))
+            url = "http://127.0.0.1:9080/Crear_Usuario/"  
+            headers = {'Content-Type': 'application/json'}
+            response = requests.post(url, data=especialista_json_u, headers=headers)
 
-            # Insertar nuevo usuario
-            hashed_pw = generate_password_hash(password)
-            cur.execute(
-                "INSERT INTO usuarios (nombre, apellido, email, password) VALUES (%s, %s, %s, %s)",
-                (nombre, apellido, email, hashed_pw)
-            )
-            mysql.connection.commit()
-            cur.close()
+            if response.status_code == 200:
+                flash('Registro exitoso', 'success')
+            else:
+                flash(f'Error en la API: {response.text}', 'danger')
 
-            flash('¡Registro exitoso! Por favor inicia sesión', 'success')
-            return redirect(url_for('auth.login'))
+        except requests.exceptions.RequestException as e:
+            flash(f'Error al conectar con la API: {str(e)}', 'danger')
 
         except Exception as e:
             mysql.connection.rollback()
-            flash('Error en el servidor: ' + str(e), 'danger')
+            return jsonify({'Mensaje': 'Error en el servidor: ' + str(e)}), 500
 
     return render_template('auth/registro.html')
 
@@ -159,13 +207,14 @@ def registro_especialista():
         genero = request.form['gender']
         licencia = request.form['license'].strip()
         especialidad = request.form['specialization']
-        experiencia = request.form['experience']
+        años_experiencia = request.form['experience']
         password = request.form['password']
+        precio = int(request.form['precio'])
         confirm_password = request.form['confirm_password']
         accept_terms = request.form.get('accept_terms') == 'on'
 
         # Validaciones
-        if not all([nombre, apellido, email, genero, licencia, especialidad, experiencia, password, confirm_password]):
+        if not all([nombre, apellido, email, genero, licencia, especialidad, años_experiencia, password, confirm_password]):
             flash('Todos los campos son obligatorios', 'danger')
             return redirect(url_for('auth.registro_especialista'))
 
@@ -185,40 +234,38 @@ def registro_especialista():
             flash('Email no válido', 'danger')
             return redirect(url_for('auth.registro_especialista'))
 
+        # Crear diccionario JSON
+        especialista_data = {
+            "nombre": nombre,
+            "apellido": apellido,
+            "email": email,
+            "genero": genero,
+            "licencia": licencia,
+            "password": password,   
+            "especialidad": especialidad,
+            "años_experiencia": años_experiencia,
+            "precio": precio
+        }
+
+        
+        especialista_json = json.dumps(especialista_data)
+        print(especialista_json)
+        # Enviar datos a FastAPI
         try:
-            cur = mysql.connection.cursor()
-            
-            # Verificar si el email ya existe en usuarios o especialistas
-            cur.execute("SELECT email FROM usuarios WHERE email = %s UNION SELECT email FROM especialistas WHERE email = %s", (email, email))
-            if cur.fetchone():
-                flash('Este email ya está registrado', 'danger')
-                return redirect(url_for('auth.registro_especialista'))
+            url = "http://127.0.0.1:9080/Crear_Esp/"  
+            headers = {'Content-Type': 'application/json'}
+            response = requests.post(url, data=especialista_json, headers=headers)
 
-            # Verificar si la licencia ya existe
-            cur.execute("SELECT licencia FROM especialistas WHERE licencia = %s", (licencia,))
-            if cur.fetchone():
-                flash('Esta licencia profesional ya está registrada', 'danger')
-                return redirect(url_for('auth.registro_especialista'))
+            if response.status_code == 200:
+                flash('Registro exitoso', 'success')
+            else:
+                flash(f'Error en la API: {response.text}', 'danger')
 
-            # Insertar nuevo especialista
-            hashed_pw = generate_password_hash(password)
-            cur.execute(
-                """INSERT INTO especialistas 
-                (nombre, apellido, email, genero, licencia, especialidad, años_experiencia, password) 
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
-                (nombre, apellido, email, genero, licencia, especialidad, experiencia, hashed_pw)
-            )
-            mysql.connection.commit()
-            cur.close()
-
-            flash('¡Registro exitoso! Tu cuenta está pendiente de verificación', 'success')
-            return redirect(url_for('auth.login'))
-
-        except Exception as e:
-            mysql.connection.rollback()
-            flash('Error en el servidor: ' + str(e), 'danger')
+        except requests.exceptions.RequestException as e:
+            flash(f'Error al conectar con la API: {str(e)}', 'danger')
 
     return render_template('auth/registroEspecialista.html')
+
 
 @auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
@@ -227,46 +274,26 @@ def login():
         password = request.form['password']
 
         try:
-            cur = mysql.connection.cursor()
-            
-            # Primero buscar en usuarios
-            cur.execute("SELECT * FROM usuarios WHERE email = %s", (email,))
-            user = cur.fetchone()
-            
-            if user and check_password_hash(user['password'], password):
-                session['user_id'] = user['id']
-                session['user_email'] = user['email']
-                session['user_name'] = f"{user['nombre']} {user['apellido']}"
-                session['user_type'] = 'usuario'
-                flash(f'¡Bienvenido/a {user["nombre"]}!', 'success')
+            response = requests.post('http://127.0.0.1:9080/Iniciar_Sesion/', 
+                                     json={"email": email, "password": password})
+            if response.status_code == 200:
+                datos_devueltos = response.json()
+
+                session['access_token'] = datos_devueltos['access_token']
+                session['token_type'] = datos_devueltos['token_type']
+
+                flash('Inicio de sesión exitoso', 'success')
                 return redirect(url_for('general.inicio'))
-            
-            # Si no es usuario, buscar en especialistas
-            cur.execute("SELECT * FROM especialistas WHERE email = %s", (email,))
-            especialista = cur.fetchone()
-            
-            if especialista:
-                if check_password_hash(especialista['password'], password):
-                    if not especialista['verificado']:
-                        flash('Tu cuenta aún no ha sido verificada. Por favor espera la confirmación.', 'warning')
-                        return redirect(url_for('auth.login'))
-                    
-                    session['user_id'] = especialista['id']
-                    session['user_email'] = especialista['email']
-                    session['user_name'] = f"{especialista['nombre']} {especialista['apellido']}"
-                    session['user_type'] = 'especialista'
-                    flash(f'¡Bienvenido/a profesional {especialista["nombre"]}!', 'success')
-                    return redirect(url_for('general.inicio'))
-                else:
-                    flash('Email o contraseña incorrectos', 'danger')
             else:
-                flash('Email o contraseña incorrectos', 'danger')
-
-            cur.close()
-
-        except Exception as e:
-            flash('Error en el servidor: ' + str(e), 'danger')
-
+                error_message = response.json().get('Mensaje', 'Correo incorrecto')
+                flash(f'Error: {error_message}', 'danger')  
+                return redirect(url_for('auth.login'))
+            
+        except requests.exceptions.RequestException as e:
+            print(f"Error en la conexión: {str(e)}")
+            flash('Hubo un problema con la conexión. Intenta más tarde.', 'danger')
+            return redirect(url_for('auth.login'))
+  
     return render_template('auth/login.html')
 
 @auth_bp.route('/logout')

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediagnóstico| MentalBalance</title>
+    <meta name="description" content="Realiza nuestro test de salud mental con profesionales certificados">
+    <link rel="icon" href="{{ url_for('static', filename='img/logo.png') }}" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .typeform-container {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .typeform-header {
+            margin-bottom: 30px;
+        }
+        
+        .typeform-title {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .typeform-description {
+            font-size: 1.1rem;
+            color: #34495e;
+            line-height: 1.6;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .typeform-embed {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .back-btn {
+            display: inline-block;
+            margin-top: 30px;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .typeform-embed {
+                height: 500px;
+            }
+            
+            .typeform-title {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include 'layouts/navbar.html' %}
+    
+    <!-- Mensajes Flash -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                    <div class="flash-message flash-{{ category }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Typeform Container -->
+    <section class="typeform-container">
+        <div class="typeform-header">
+            <h1 class="typeform-title">Prediagnóstico</h1>
+            <p class="typeform-description">
+                Por favor completa este formulario con sinceridad. Tus respuestas nos ayudarán a entender 
+                mejor tus necesidades y recomendarte el apoyo más adecuado.
+            </p>
+        </div>
+        
+        <!-- IFrame de Typeform -->
+        <iframe class="typeform-embed" 
+                src="https://form.typeform.com/to/qL8P7dE6" 
+                frameborder="0">
+        </iframe>
+        
+        <p style="margin-top: 20px; color: #7f8c8d; font-size: 0.9rem;">
+            Todos tus datos están protegidos y serán tratados con confidencialidad.
+        </p>
+        
+        <a href="{{ url_for('general.test') }}" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Volver a los Test
+        </a>
+    </section>
+
+    {% include 'layouts/footer.html' %}
+</body>
+</html>
